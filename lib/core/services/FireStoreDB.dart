@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 import 'package:recipes_hub/models/UserModel.dart';
 
-class Database {
-  final Firestore _firestore = Firestore.instance;
+class FireStoreDB {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<bool> createNewUser(UserModel user) async {
     try {
-      await _firestore.collection("users").document(user.id).setData({
+      await _firestore.collection("users").doc(user.id).setData({
         "name": user.name,
         "email": user.email,
       });
@@ -21,9 +21,9 @@ class Database {
   Future<UserModel> getUser(String uid) async {
     try {
       DocumentSnapshot _doc =
-      await _firestore.collection("users").document(uid).get();
+      await _firestore.collection("users").doc(uid).get();
 
-      return UserModel.fromDocumentSnapshot(documentSnapshot: _doc);
+      return UserModel.fromDocument( _doc);
     } catch (e) {
       print(e);
       rethrow;
@@ -34,7 +34,7 @@ class Database {
     try {
       await _firestore
           .collection("users")
-          .document(uid)
+          .doc(uid)
           .collection("todos")
           .add({
         'dateCreated': Timestamp.now(),
@@ -50,13 +50,13 @@ class Database {
   Stream<List<TodoModel>> todoStream(String uid) {
     return _firestore
         .collection("users")
-        .document(uid)
+        .doc(uid)
         .collection("todos")
         .orderBy("dateCreated", descending: true)
         .snapshots()
         .map((QuerySnapshot query) {
-      List<TodoModel> retVal = List();
-      query.documents.forEach((element) {
+      List<TodoModel> retVal = [];
+      query.docs.forEach((element) {
         retVal.add(TodoModel.fromDocument(element));
       });
       return retVal;
@@ -67,10 +67,10 @@ class Database {
     try {
       _firestore
           .collection("users")
-          .document(uid)
+          .doc(uid)
           .collection("todos")
-          .document(todoId)
-          .updateData({"done": newValue});
+          .doc(todoId)
+          .update({"done": newValue});
     } catch (e) {
       print(e);
       rethrow;
