@@ -11,8 +11,6 @@ class Root extends GetWidget<AuthController> {
     return GetX(
       initState: (_) async {
         Get.put<UserController>(UserController());
-        //Get.put<AuthController>(AuthController());
-        //Get.lazyPut(()=>AuthController());
       },
       builder: (_) {
         if (Get.find<AuthController>().user?.uid != null) {

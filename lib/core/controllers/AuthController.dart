@@ -15,6 +15,7 @@ import 'package:recipes_hub/core/services/FireStoreDB.dart';
     @override
     onInit() {
       super.onInit();
+      _firebaseUser.bindStream(_auth.authStateChanges());
     }
 
     void createUser(String name, String email, String password) async {
@@ -27,7 +28,7 @@ import 'package:recipes_hub/core/services/FireStoreDB.dart';
           name: name,
           email: _authResult.user.email,
         );
-        if (await Database().createNewUser(_user)) {
+        if (await FireStoreDB().createNewUser(_user)) {
           Get.find<UserController>().user = _user;
           Get.back();
         }
@@ -45,7 +46,7 @@ import 'package:recipes_hub/core/services/FireStoreDB.dart';
         UserCredential _authResult = await _auth.signInWithEmailAndPassword(
             email: email.trim(), password: password);
         Get.find<UserController>().user =
-        await Database().getUser(_authResult.user.uid);
+        await FireStoreDB().getUser(_authResult.user.uid);
       } catch (e) {
         Get.snackbar(
           "Error signing in",

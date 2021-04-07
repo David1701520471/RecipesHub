@@ -7,9 +7,11 @@ class UserModel {
 
   UserModel({this.id, this.name, this.email});
 
-  UserModel.fromDocumentSnapshot({DocumentSnapshot documentSnapshot}) {
-    id = documentSnapshot.documentID;
-    name = documentSnapshot["name"];
-    email = documentSnapshot["email"];
+  factory UserModel.fromDocument(DocumentSnapshot doc) {
+    return UserModel(
+      id : doc.data()['id'],
+      name : doc.data()["name"],
+      email : doc.data()["email"],
+    );
   }
 }

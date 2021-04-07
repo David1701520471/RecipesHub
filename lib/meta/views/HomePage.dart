@@ -16,13 +16,21 @@ class HomePage extends GetWidget<AuthController> {
         title: GetX<UserController>(
           initState: (_) async {
             Get.find<UserController>().user =
-            await Database().getUser(Get.find<AuthController>().user.uid);
+            await FireStoreDB().getUser(Get.find<AuthController>().user.uid);
           },
           builder: (_) {
-            if (_.user.name != null) {
-              return Text("Welcome " + _.user.name);
+            if (_.user.email != null) {
+              return Text(
+                  "Welcome " + _.user.name,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontWeight: FontWeight.bold),);
             } else {
-              return Text("loading...");
+              return Text(
+                  "loading...",
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontWeight: FontWeight.bold),);
             }
           },
         ),
@@ -73,7 +81,7 @@ class HomePage extends GetWidget<AuthController> {
                     icon: Icon(Icons.add),
                     onPressed: () {
                       if (_todoController.text != "") {
-                        Database()
+                        FireStoreDB()
                             .addTodo(_todoController.text, controller.user.uid);
                         _todoController.clear();
                       }

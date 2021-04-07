@@ -27,9 +27,8 @@ class TodoCard extends StatelessWidget {
               ),
             ),
             Checkbox(
-              value: todo.done,
               onChanged: (newValue) {
-                //FireStoreDB().updateTodo(newValue, uid, todo.todoId);
+                FireStoreDB().updateTodo(newValue, uid, todo.todoId);
               },
             ),
           ],
