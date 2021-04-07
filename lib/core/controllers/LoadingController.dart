@@ -9,7 +9,7 @@ class LoadingController extends GetxController{
     super.onReady();
     Future.delayed(Duration(seconds: 2),(){
       Get.to(
-            ()=>HomePage(),
+            ()=> HomePage(),
         transition: Transition.zoom,
       );
     });
