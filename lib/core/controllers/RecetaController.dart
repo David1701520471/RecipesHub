@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/models/Common/Categoria.dart';
 import 'package:recipes_hub/models/Receta/RecetaModel.dart';
+import 'package:recipes_hub/core/services/FireStoreDB.dart';
+
+import 'AuthController.dart';
 
 class RecetaController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController ingredienteController = TextEditingController();
   TextEditingController pasosController = TextEditingController();
   RecetaModel formRes;
+
+  String uid;
 
   Rx<List<RecetaModel>> ricepieList = new Rx<List<RecetaModel>>();
   RxList<String> pasosList = new RxList<String>();
@@ -52,7 +57,7 @@ class RecetaController extends GetxController {
       new Categoria("Saludable", false),
     ]);
 
-    //uid = Get.find<AuthController>().user.uid;
+    uid = Get.find<AuthController>().user.uid;
     //ricepieList.bindStream(
     //FireStoreDB().todoStream(uid)); //stream coming from firebase
   }
@@ -66,6 +71,8 @@ class RecetaController extends GetxController {
 
   void validarFormulario() {
     //TODO:
+    //despues de validar el agragar se llama el metodo para guaradar en la base de datos
+    //FireStoreDB().agregarReceta(formRes, uid);
   }
 
   String validarNombre(String nombre) {

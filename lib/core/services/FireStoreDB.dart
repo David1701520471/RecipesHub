@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recipes_hub/models/Receta/RecetaModel.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 import 'package:recipes_hub/models/UserModel.dart';
 
@@ -67,6 +68,21 @@ class FireStoreDB {
           .collection("todos")
           .doc(todoId)
           .update({"done": newValue});
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
+
+
+  Future<void> agregarReceta(RecetaModel receta, String uid) async {
+    try {
+      await _firestore
+          .collection("users")
+          .doc(uid)
+          .collection("recipes")
+          .add(receta.toMap());
     } catch (e) {
       print(e);
       rethrow;
