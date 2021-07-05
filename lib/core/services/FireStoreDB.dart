@@ -7,7 +7,7 @@ class FireStoreDB {
 
   Future<bool> createNewUser(UserModel user) async {
     try {
-      await _firestore.collection("users").doc(user.id).setData({
+      await _firestore.collection("users").doc(user.id).set({
         "name": user.name,
         "email": user.email,
       });
@@ -21,9 +21,9 @@ class FireStoreDB {
   Future<UserModel> getUser(String uid) async {
     try {
       DocumentSnapshot _doc =
-      await _firestore.collection("users").doc(uid).get();
+          await _firestore.collection("users").doc(uid).get();
 
-      return UserModel.fromDocument( _doc);
+      return UserModel.fromDocument(_doc);
     } catch (e) {
       print(e);
       rethrow;
@@ -32,11 +32,7 @@ class FireStoreDB {
 
   Future<void> addTodo(String content, String uid) async {
     try {
-      await _firestore
-          .collection("users")
-          .doc(uid)
-          .collection("todos")
-          .add({
+      await _firestore.collection("users").doc(uid).collection("todos").add({
         'dateCreated': Timestamp.now(),
         'content': content,
         'done': false,
