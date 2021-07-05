@@ -4,6 +4,7 @@ import 'package:recipes_hub/core/controllers/AuthController.dart';
 import 'package:recipes_hub/core/controllers/UserController.dart';
 import 'package:recipes_hub/meta/views/HomePage.dart';
 import 'package:recipes_hub/meta/views/Login.dart';
+import 'package:recipes_hub/meta/views/RecetaView.dart';
 
 class Root extends GetWidget<AuthController> {
   @override
@@ -14,7 +15,9 @@ class Root extends GetWidget<AuthController> {
       },
       builder: (_) {
         if (Get.find<AuthController>().user?.uid != null) {
-          return HomePage();
+          //return HomePage();
+          //propositos de pruebas
+          return RecetaView();
         } else {
           return Login();
         }

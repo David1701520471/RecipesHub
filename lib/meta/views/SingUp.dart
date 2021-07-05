@@ -38,7 +38,7 @@ class SignUp extends GetWidget<AuthController> {
                 obscureText: true,
                 controller: passwordController,
               ),
-              FlatButton(
+              ElevatedButton(
                 child: Text("Sign Up"),
                 onPressed: () {
                   controller.createUser(nameController.text,
