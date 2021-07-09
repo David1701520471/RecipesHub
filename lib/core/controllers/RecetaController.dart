@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/models/Common/Categoria.dart';
 import 'package:recipes_hub/models/Receta/RecetaModel.dart';
 import 'package:recipes_hub/core/services/FireStoreDB.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'AuthController.dart';
 
@@ -27,6 +30,10 @@ class RecetaController extends GetxController {
 
   RxList<Categoria> categoriasList = new RxList();
   List<String> categoriasSeleccionadasList = [];
+
+  RxList<PickedFile> selectedImageList = new RxList<PickedFile>();
+  RxList<File> selectedImageListFile = new RxList<File>();
+  RxString selectedImagePath = new RxString();
 
   List<RecetaModel> get recipes => ricepieList.value;
   RxList<String> get pasos => pasosList;
@@ -57,6 +64,7 @@ class RecetaController extends GetxController {
       new Categoria("Saludable", false),
     ]);
 
+    selectedImagePath = ''.obs;
     uid = Get.find<AuthController>().user.uid;
     //ricepieList.bindStream(
     //FireStoreDB().todoStream(uid)); //stream coming from firebase
@@ -69,10 +77,53 @@ class RecetaController extends GetxController {
     pasosController.dispose();
   }
 
+
+  void saveRecipe(TextEditingController todoController, String uid) {
+    if (todoController != null) {
+      FireStoreDB().addTodo(todoController.text, uid);
+      todoController.clear();
+    }
+  }
+
+  /**
+   * Metodo usado para validar los campos especificados:
+   * nombre de la receta,
+   * numero de pasos,
+   * categorias seleccionadas.
+   * Junto a la confimacion de envio de la receta
+   */
   void validarFormulario() {
-    //TODO:
-    //despues de validar el agragar se llama el metodo para guaradar en la base de datos
-    //FireStoreDB().agregarReceta(formRes, uid);
+    final isValid = formKey.currentState.validate();
+    if (!isValid) {
+      return;
+    } else if (formRes.pasos.length < 1) {
+      Get.snackbar("Se requiere un paso como minimo", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
+    } else if (formRes.categorias.length < 1) {
+      Get.snackbar("Se requiere una categoria como minimo", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
+    } else {
+      Get.defaultDialog(
+        title: "La receta se enviara a revisión",
+        titleStyle: TextStyle(fontSize: 17),
+        middleText: "¿ Esta seguro que desea enviarla ?",
+        middleTextStyle: TextStyle(fontSize: 14),
+        textCancel: "Cancelar",
+        textConfirm: "Confirmar",
+        confirmTextColor: Colors.white,
+        onCancel: () => Get.back(),
+        onConfirm: () {
+          //TODO: enviar el formResult a la base de datos
+          //FireStoreDB().addRecipe(formRes, uid);
+          print("ya prro");
+        },
+      );
+    }
+    formKey.currentState.save();
   }
 
   String validarNombre(String nombre) {
@@ -84,6 +135,8 @@ class RecetaController extends GetxController {
     return null;
   }
 
+
+
   RxList<int> listaTiempos(String tipo) {
     if (tipo == "Minutos") {
       return minutos;
@@ -93,13 +146,36 @@ class RecetaController extends GetxController {
     return null;
   }
 
-  void listarCategoriasSeleccionadas(String categoria, bool check) {
-    if (check) {
-      categoriasSeleccionadasList.add(categoria);
+  /**
+   * Metodo empleado para obtener la imagen seleccionada desde la galeria
+   */
+  void getImage(ImageSource imageSource) async {
+    final pickedFile = await ImagePicker().getImage(source: imageSource);
+    if (pickedFile != null) {
+      selectedImageList.add(pickedFile);
+      selectedImageListFile.add(File(pickedFile.path));
     } else {
-      categoriasSeleccionadasList
-          .removeWhere((element) => element == categoria);
+      Get.snackbar("Error", "No se ha seleccionado ninguna imagen",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
     }
+  }
+
+  void eliminarImagen(int index) {
+    selectedImageList.removeAt(index);
+  }
+
+  void asiganarValor(String tipo, int value) {
+    if (tipo == "Minutos") {
+      this.duracionM = value;
+    } else if (tipo == "Horas") {
+      this.duracionH = value;
+    }
+  }
+
+  void asignarDificultad(String value) {
+    this.dificultad = value;
   }
 
   void agregarPaso() {
@@ -122,6 +198,7 @@ class RecetaController extends GetxController {
     if (ingredienteController != null && ingredienteController.text != "") {
       ingredientesList.add(ingredienteController.text);
       ingredienteController.clear();
+      print(ingredientesList);
     } else {
       Get.snackbar("El campo ingrediete es requerido", "",
           snackPosition: SnackPosition.BOTTOM,
@@ -135,7 +212,19 @@ class RecetaController extends GetxController {
   }
 
   String setTiempo() {
-    return null;
+    int calculomachete = (duracionH * 100) + duracionM;
+    String duracion = calculomachete.toString();
+    return duracion;
+  }
+
+
+  void listarCategoriasSeleccionadas(String categoria, bool check) {
+    if (check) {
+      categoriasSeleccionadasList.add(categoria);
+    } else {
+      categoriasSeleccionadasList
+          .removeWhere((element) => element == categoria);
+    }
   }
 
   void asiganarValorTiempo(String tipo, int value) {
@@ -144,9 +233,5 @@ class RecetaController extends GetxController {
     } else if (tipo == "Horas") {
       this.duracionH = value;
     }
-  }
-
-  void asignarDificultad(String value) {
-    this.dificultad = value;
   }
 }
