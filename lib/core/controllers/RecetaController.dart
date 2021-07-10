@@ -104,7 +104,18 @@ class RecetaController extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Color.fromARGB(250, 200, 72, 45),
           colorText: Colors.white);
-    } else {
+    }else if(duracionM!=null && duracionH==null){
+      Get.snackbar("Por favor seleccione hora", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
+    } else if(duracionM==null && duracionH!=null){
+      Get.snackbar("Por favor seleccione minutos", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
+    }
+    else {
       Get.defaultDialog(
         title: "La receta se enviara a revisión",
         titleStyle: TextStyle(fontSize: 17),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/core/controllers/AuthController.dart';
 import 'package:recipes_hub/core/controllers/UserController.dart';
-import 'package:recipes_hub/meta/views/HomePage.dart';
+//import 'package:recipes_hub/meta/views/HomePage.dart';
 import 'package:recipes_hub/meta/views/Login.dart';
 import 'package:recipes_hub/meta/views/RecetaView.dart';
 
