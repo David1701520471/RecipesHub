@@ -14,9 +14,10 @@ class TodoModel {
 
   factory TodoModel.fromDocument(DocumentSnapshot doc) {
     return TodoModel(
-      content: doc.data()["content"],
+      content: doc.data()['content'],
+      // ignore: file_names
       todoId: doc.data()['id'],
-      dateCreated: doc.data()["dateCreated"],
+      dateCreated: doc.data()['dateCreated'],
     );
   }
 
