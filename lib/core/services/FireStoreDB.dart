@@ -10,6 +10,8 @@ import 'package:recipes_hub/models/UserModel.dart';
 
 class FireStoreDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final DocumentReference ref = FirebaseFirestore.instance.collection("image").doc();
+  List <String> urls = [];
 
   Future<bool> createNewUser(UserModel user) async {
     try {
@@ -83,6 +85,7 @@ class FireStoreDB {
 
   Future<void> agregarReceta(RecetaModel receta, String uid) async {
     try {
+      await saveImages(receta.imagenes);
       await _firestore
           .collection("users")
           .doc(uid)
@@ -94,10 +97,11 @@ class FireStoreDB {
         'duracion': receta.duracion,
         'ingredientes':receta.ingredientes,
         'pasos':receta.pasos,
-        'nombre':receta.nombre
+        'nombre':receta.nombre,
+        'imagenes':urls
 
       });
-      saveImages(receta.imagenes);
+
 
 
     } catch (e) {
@@ -108,14 +112,18 @@ class FireStoreDB {
 
 
 
-  Future<void> saveImages(List<File> _images) async {
+  Future<String> saveImages(List<File> _images) async {
 
 
-    DocumentReference ref = Firestore.instance.collection("image").doc();
+
     _images.forEach((image) async {
+
       String imageURL = await uploadFile(image);
+      urls.add(imageURL);
       ref.update({"image": FieldValue.arrayUnion([imageURL])});
     });
+
+
   }
 
 
