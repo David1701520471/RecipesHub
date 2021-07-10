@@ -1,10 +1,17 @@
+import 'dart:io';
+
+import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:recipes_hub/models/Receta/RecetaModel.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 import 'package:recipes_hub/models/UserModel.dart';
 
 class FireStoreDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final DocumentReference ref = FirebaseFirestore.instance.collection("image").doc();
+  List <String> urls = [];
 
   Future<bool> createNewUser(UserModel user) async {
     try {
@@ -78,14 +85,71 @@ class FireStoreDB {
 
   Future<void> agregarReceta(RecetaModel receta, String uid) async {
     try {
+      await saveImages(receta.imagenes);
       await _firestore
           .collection("users")
           .doc(uid)
           .collection("recipes")
-          .add(receta.toMap());
+          .add({
+        'categorias':receta.categorias,
+        'descripcion':receta.descripcion,
+        'dificultad' : receta.dificultad,
+        'duracion': receta.duracion,
+        'ingredientes':receta.ingredientes,
+        'pasos':receta.pasos,
+        'nombre':receta.nombre,
+        'imagenes':urls
+
+      });
+
+
+
     } catch (e) {
       print(e);
       rethrow;
     }
   }
+
+
+
+  Future<String> saveImages(List<File> _images) async {
+
+
+
+    _images.forEach((image) async {
+
+      String imageURL = await uploadFile(image);
+      urls.add(imageURL);
+      ref.update({"image": FieldValue.arrayUnion([imageURL])});
+    });
+
+
+  }
+
+
+
+  Future<String> uploadFile(File _image) async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${basename(_image.path)}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    String returnURL;
+    await storageReference.getDownloadURL().then((fileURL) {
+      returnURL =  fileURL;
+    });
+    return returnURL;
+  }
+
+
+
+
+
+
+
+
+
+
+
 }
