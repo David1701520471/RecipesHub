@@ -93,7 +93,6 @@ class RecetaController extends GetxController {
    * Junto a la confimacion de envio de la receta
    */
   void validarFormulario() {
-
     final isValid = formKey.currentState.validate();
     if (!isValid) {
       return;
@@ -126,7 +125,6 @@ class RecetaController extends GetxController {
       );
     }
     formKey.currentState.save();
-
   }
 
   String validarNombre(String nombre) {
