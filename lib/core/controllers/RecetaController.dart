@@ -71,7 +71,7 @@ class RecetaController extends GetxController {
 
   void validarFormulario() {
     //TODO:
-    //despues de validar el agragar se llama el metodo para guaradar en la base de datos
+    //despues de validar el agregar se llama el metodo para guaradar en la base de datos
     //FireStoreDB().agregarReceta(formRes, uid);
   }
 
