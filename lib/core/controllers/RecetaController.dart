@@ -120,6 +120,7 @@ class RecetaController extends GetxController {
           //TODO: enviar el formResult a la base de datos
          FireStoreDB().agregarReceta(formRes, uid);
           print("ya prro");
+          Get.back();
         },
       );
     }
