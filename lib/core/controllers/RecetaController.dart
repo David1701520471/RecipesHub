@@ -118,7 +118,7 @@ class RecetaController extends GetxController {
         onCancel: () => Get.back(),
         onConfirm: () {
           //TODO: enviar el formResult a la base de datos
-         FireStoreDB().agregarReceta(formRes, uid);
+          //FireStoreDB().addRecipe(formRes, uid);
           print("ya prro");
         },
       );

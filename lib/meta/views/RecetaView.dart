@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:recipes_hub/core/controllers/RecetaController.dart';
 import 'package:recipes_hub/meta/widgets/CheckBoxList.dart';
 import 'package:recipes_hub/meta/widgets/FormularioReceta/CardsDeListado.dart';
-import 'package:recipes_hub/meta/widgets/FormularioReceta/ImagenesCard.dart';
 import 'package:recipes_hub/meta/widgets/FormularioReceta/ListarDificultad.dart';
 import 'package:recipes_hub/meta/widgets/FormularioReceta/ListarNumeros.dart';
 
@@ -144,21 +142,11 @@ class RecetaView extends GetWidget<RecetaController> {
                         ),
                         onPressed: () {
                           //TODO: Obtener imagenes desde galeria del celular
-                          _.getImage(ImageSource.gallery);
                         },
                         label: Text("Seleccionar foto"),
                       ),
                     ),
                     //TODO: listar imagenes seleccionadas
-
-                    Obx(() {
-                      if (_.selectedImageList.isEmpty) {
-                        return Text("Seleccione una imagen desde galeria");
-                      } else {
-                        return listarImagenes(_);
-
-                      }
-                    }),
                   ],
                 ),
                 SizedBox(
@@ -176,9 +164,8 @@ class RecetaView extends GetWidget<RecetaController> {
                       _.formResult.pasos = _.pasosList;
                       _.formResult.ingredientes = _.ingredientesList;
                       _.formResult.dificultad = _.dificultad;
-                      _.formResult.imagenes = _.selectedImageListFile;
                       print(_.formResult.toJson());
-                       _.validarFormulario();
+                      //TODO: _.validarFormulario();
                     })
               ],
             ),
@@ -219,13 +206,4 @@ Widget listarCategorias(RecetaController controller) {
       itemBuilder: (_, index) {
         return CheckBoxList(controller, index);
       });
-}
-Widget listarImagenes(RecetaController controller) {
-  return GridView.builder(
-      itemCount: controller.selectedImageList.length,
-      shrinkWrap: true,
-      physics: ScrollPhysics(),
-      gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-      itemBuilder: (_, index) => ImagenesCard(controller, index));
 }

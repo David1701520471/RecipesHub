@@ -3,9 +3,9 @@
 class Categoria {
 
 
-
+  Categoria(categoria, check);
   String categoria;
   bool check;
-  Categoria(this.categoria, this.check);
+
 
 }
