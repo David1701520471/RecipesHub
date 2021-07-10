@@ -17,23 +17,23 @@ class RecetaController extends GetxController {
 
   String uid;
 
-  Rx<List<RecetaModel>> ricepieList = new Rx<List<RecetaModel>>();
-  RxList<String> pasosList = new RxList<String>();
-  RxList<String> ingredientesList = new RxList<String>();
-  RxList<int> horas = new RxList<int>();
-  RxList<int> minutos = new RxList<int>();
+  Rx<List<RecetaModel>> ricepieList =  Rx<List<RecetaModel>>();
+  RxList<String> pasosList =  RxList<String>();
+  RxList<String> ingredientesList =  RxList<String>();
+  RxList<int> horas =  RxList<int>();
+  RxList<int> minutos =  RxList<int>();
   int duracionH = null.obs();
   int duracionM = null.obs();
 
-  RxList<String> dificultadesList = new RxList<String>();
+  RxList<String> dificultadesList =  RxList<String>();
   String dificultad = null.obs();
 
-  RxList<Categoria> categoriasList = new RxList();
+  RxList<Categoria> categoriasList =  RxList();
   List<String> categoriasSeleccionadasList = [];
 
-  RxList<PickedFile> selectedImageList = new RxList<PickedFile>();
-  RxList<File> selectedImageListFile = new RxList<File>();
-  RxString selectedImagePath = new RxString();
+  RxList<PickedFile> selectedImageList =  RxList<PickedFile>();
+  RxList<File> selectedImageListFile =  RxList<File>();
+  RxString selectedImagePath =  RxString();
 
   List<RecetaModel> get recipes => ricepieList.value;
   RxList<String> get pasos => pasosList;
@@ -56,12 +56,12 @@ class RecetaController extends GetxController {
     dificultades.addAll(['Baja', 'Media', 'Alta']);
     //TODO: codigo quemado para pruebas, esta infor se debería obtener desde la base de datos
     categoriasList.addAll([
-      new Categoria("Almuerzo", false),
-      new Categoria("Ensaladas", false),
-      new Categoria("Cenas", false),
-      new Categoria("Postres", false),
-      new Categoria("Desayunos", false),
-      new Categoria("Saludable", false),
+       Categoria("Almuerzo", false),
+       Categoria("Ensaladas", false),
+       Categoria("Cenas", false),
+       Categoria("Postres", false),
+       Categoria("Desayunos", false),
+       Categoria("Saludable", false),
     ]);
 
     selectedImagePath = ''.obs;
@@ -85,28 +85,37 @@ class RecetaController extends GetxController {
     }
   }
 
-  /**
-   * Metodo usado para validar los campos especificados:
-   * nombre de la receta,
-   * numero de pasos,
-   * categorias seleccionadas.
-   * Junto a la confimacion de envio de la receta
-   */
+  /// Metodo usado para validar los campos especificados:
+  /// nombre de la receta,
+  /// numero de pasos,
+  /// categorias seleccionadas.
+  /// Junto a la confimacion de envio de la receta
   void validarFormulario() {
     final isValid = formKey.currentState.validate();
     if (!isValid) {
       return;
-    } else if (formRes.pasos.length < 1) {
+    } else if (formRes.pasos.isEmpty) {
       Get.snackbar("Se requiere un paso como minimo", "",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Color.fromARGB(250, 200, 72, 45),
           colorText: Colors.white);
-    } else if (formRes.categorias.length < 1) {
+    } else if (formRes.categorias.isEmpty) {
       Get.snackbar("Se requiere una categoria como minimo", "",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Color.fromARGB(250, 200, 72, 45),
           colorText: Colors.white);
-    } else {
+    }else if(duracionM!=null && duracionH==null){
+      Get.snackbar("Por favor seleccione hora", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
+    } else if(duracionM==null && duracionH!=null){
+      Get.snackbar("Por favor seleccione minutos", "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Color.fromARGB(250, 200, 72, 45),
+          colorText: Colors.white);
+    }
+    else {
       Get.defaultDialog(
         title: "La receta se enviara a revisión",
         titleStyle: TextStyle(fontSize: 17),
@@ -128,7 +137,7 @@ class RecetaController extends GetxController {
   }
 
   String validarNombre(String nombre) {
-    if (nombre.length == 0) {
+    if (nombre.isEmpty) {
       return "el campo nombre es requerido";
     } else if (nombre.length > 70) {
       return "el nombre de la receta no debe exceder los 70 caracteres";
@@ -147,9 +156,7 @@ class RecetaController extends GetxController {
     return null;
   }
 
-  /**
-   * Metodo empleado para obtener la imagen seleccionada desde la galeria
-   */
+  /// Metodo empleado para obtener la imagen seleccionada desde la galeria
   void getImage(ImageSource imageSource) async {
     final pickedFile = await ImagePicker().getImage(source: imageSource);
     if (pickedFile != null) {
@@ -169,14 +176,14 @@ class RecetaController extends GetxController {
 
   void asiganarValor(String tipo, int value) {
     if (tipo == "Minutos") {
-      this.duracionM = value;
+      duracionM = value;
     } else if (tipo == "Horas") {
-      this.duracionH = value;
+      duracionH = value;
     }
   }
 
   void asignarDificultad(String value) {
-    this.dificultad = value;
+   dificultad = value;
   }
 
   void agregarPaso() {
@@ -230,9 +237,9 @@ class RecetaController extends GetxController {
 
   void asiganarValorTiempo(String tipo, int value) {
     if (tipo == "Minutos") {
-      this.duracionM = value;
+      duracionM = value;
     } else if (tipo == "Horas") {
-      this.duracionH = value;
+      duracionH = value;
     }
   }
 }

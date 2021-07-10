@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:recipes_hub/core/services/FireStoreDB.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 
 class TodoCard extends StatelessWidget {

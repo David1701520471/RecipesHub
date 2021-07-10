@@ -1,5 +1,5 @@
-  //FirebaseUser esta actualizado ahora se usa User, AuthCredtential ahora se usa UserCredential
-  //solo hacer los metodos crearUser, login y singout
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/core/controllers/UserController.dart';
@@ -7,8 +7,8 @@ import 'package:recipes_hub/models/UserModel.dart';
 import 'package:recipes_hub/core/services/FireStoreDB.dart';
 
   class AuthController extends GetxController {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    Rx<User> _firebaseUser = Rx<User>();
+   final FirebaseAuth _auth = FirebaseAuth.instance;
+   final  Rx<User> _firebaseUser = Rx<User>();
 
     User get user => _firebaseUser.value;
 

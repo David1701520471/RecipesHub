@@ -61,9 +61,9 @@ class FireStoreDB {
         .snapshots()
         .map((QuerySnapshot query) {
       List<TodoModel> retVal = [];
-      query.docs.forEach((element) {
+      for ( var element in query.docs) {
         retVal.add(TodoModel.fromDocument(element));
-      });
+      }
       return retVal;
     });
   }
@@ -84,7 +84,6 @@ class FireStoreDB {
 
   Future<void> agregarReceta(RecetaModel receta, String uid) async {
     try {
-      String docId = '';
       await _firestore.collection("users").doc(uid).collection("recetas").add({
         'categorias': receta.categorias,
         'descripcion': receta.descripcion,

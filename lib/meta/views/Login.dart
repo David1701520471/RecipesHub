@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/core/controllers/AuthController.dart';
-import 'package:recipes_hub/meta/views/SingUp.dart';
+
 
 class Login extends GetWidget<AuthController> {
   final TextEditingController emailController = TextEditingController();

@@ -14,7 +14,7 @@ class CheckBoxList extends StatelessWidget {
       padding: const EdgeInsets.only(left: 100.0, right: 100.0),
       child: CheckboxListTile(
         value: controller.categoriasList[index].check,
-        title: Text('${controller.categoriasList[index].categoria}'),
+        title: Text(controller.categoriasList[index].categoria),
         controlAffinity: ListTileControlAffinity.platform,
         onChanged: (bool value) {
           controller.categoriasList[index].check = value;
