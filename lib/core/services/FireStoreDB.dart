@@ -97,6 +97,8 @@ class FireStoreDB {
         'nombre':receta.nombre
 
       });
+      saveImages(receta.imagenes);
+
 
     } catch (e) {
       print(e);
@@ -105,7 +107,7 @@ class FireStoreDB {
   }
 
 
-/*
+
   Future<void> saveImages(List<File> _images) async {
 
 
@@ -131,7 +133,7 @@ class FireStoreDB {
     });
     return returnURL;
   }
-*/
+
 
 
 

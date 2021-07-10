@@ -177,7 +177,7 @@ class RecetaView extends GetWidget<RecetaController> {
                       _.formResult.ingredientes = _.ingredientesList;
                       _.formResult.dificultad = _.dificultad;
                       _.formResult.imagenes = _.selectedImageListFile;
-                      print(_.formResult.toJson());
+
                        _.validarFormulario();
                     })
               ],
