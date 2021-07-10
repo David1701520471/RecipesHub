@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:io';
+
 class RecetaModel {
   String recipeId;
   String nombre;
@@ -8,7 +10,7 @@ class RecetaModel {
   List<String> categorias;
   List<String> ingredientes;
   String duracion;
-  List<String> imagenes;
+  List<File> imagenes;
   String dificultad;
 
   RecetaModel({
@@ -46,7 +48,7 @@ class RecetaModel {
       categorias: List<String>.from(map['categorias']),
       ingredientes: List<String>.from(map['ingredientes']),
       duracion: map['duracion'],
-      imagenes: List<String>.from(map['imagenes']),
+      imagenes: List<File>.from(map['imagenes']),
       dificultad: map['dificultad'],
     );
   }
