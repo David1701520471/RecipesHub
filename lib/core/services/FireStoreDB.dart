@@ -10,8 +10,9 @@ import 'package:recipes_hub/models/UserModel.dart';
 
 class FireStoreDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final DocumentReference ref = FirebaseFirestore.instance.collection("image").doc();
-  List <String> urls = [];
+  final DocumentReference ref =
+      FirebaseFirestore.instance.collection("image").doc();
+  List<String> urls = [];
 
   Future<bool> createNewUser(UserModel user) async {
     try {
@@ -81,75 +82,56 @@ class FireStoreDB {
     }
   }
 
-
-
   Future<void> agregarReceta(RecetaModel receta, String uid) async {
     try {
-      await saveImages(receta.imagenes);
-      await _firestore
-          .collection("users")
-          .doc(uid)
-          .collection("recipes")
-          .add({
-        'categorias':receta.categorias,
-        'descripcion':receta.descripcion,
-        'dificultad' : receta.dificultad,
+      String docId = '';
+      await _firestore.collection("users").doc(uid).collection("recetas").add({
+        'categorias': receta.categorias,
+        'descripcion': receta.descripcion,
+        'dificultad': receta.dificultad,
         'duracion': receta.duracion,
-        'ingredientes':receta.ingredientes,
-        'pasos':receta.pasos,
-        'nombre':receta.nombre,
-        'imagenes':urls
-
-      });
-
-
-
+        'ingredientes': receta.ingredientes,
+        'pasos': receta.pasos,
+        'nombre': receta.nombre
+      }).then((value) => saveImages(receta.imagenes, value.id, uid));
     } catch (e) {
       print(e);
       rethrow;
     }
   }
 
-
-
-  Future<String> saveImages(List<File> _images) async {
-
-
-
+  /// Metodo usado para subir x cantidad de imagenes en el storage de firebase
+  Future<void> saveImages(
+      List<File> _images, String idReceta, String uid) async {
     _images.forEach((image) async {
+      String imageURL = await uploadFile(image, idReceta, uid)
+          .whenComplete(() => urls.clear());
 
-      String imageURL = await uploadFile(image);
-      urls.add(imageURL);
-      ref.update({"image": FieldValue.arrayUnion([imageURL])});
+      ref.update({
+        "image": FieldValue.arrayUnion([imageURL])
+      });
     });
-
-
   }
 
-
-
-  Future<String> uploadFile(File _image) async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images/${basename(_image.path)}');
+  /// metodo que asigna el nombre de el archivo imagen y
+  /// subir la imagen en el storage de firebase
+  Future<String> uploadFile(File _image, String idReceta, String uid) async {
+    StorageReference storageReference =
+        FirebaseStorage.instance.ref().child('images/${basename(_image.path)}');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
     print('File Uploaded');
     String returnURL;
     await storageReference.getDownloadURL().then((fileURL) {
-      returnURL =  fileURL;
+      returnURL = fileURL;
+      urls.add(fileURL);
+      _firestore
+          .collection("users")
+          .doc(uid)
+          .collection("recetas")
+          .doc(idReceta)
+          .update({'imagenes': urls});
     });
     return returnURL;
   }
-
-
-
-
-
-
-
-
-
-
-
 }
