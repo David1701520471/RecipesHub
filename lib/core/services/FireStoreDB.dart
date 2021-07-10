@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:recipes_hub/models/Receta/RecetaModel.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 import 'package:recipes_hub/models/UserModel.dart';
@@ -82,10 +87,59 @@ class FireStoreDB {
           .collection("users")
           .doc(uid)
           .collection("recipes")
-          .add(receta.toMap());
+          .add({
+        'categorias':receta.categorias,
+        'descripcion':receta.descripcion,
+        'dificultad' : receta.dificultad,
+        'duracion': receta.duracion,
+        'ingredientes':receta.ingredientes,
+        'pasos':receta.pasos,
+        'nombre':receta.nombre
+
+      });
+
     } catch (e) {
       print(e);
       rethrow;
     }
   }
+
+
+/*
+  Future<void> saveImages(List<File> _images) async {
+
+
+    DocumentReference ref = Firestore.instance.collection("image").doc();
+    _images.forEach((image) async {
+      String imageURL = await uploadFile(image);
+      ref.update({"image": FieldValue.arrayUnion([imageURL])});
+    });
+  }
+
+
+
+  Future<String> uploadFile(File _image) async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('images/${basename(_image.path)}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    String returnURL;
+    await storageReference.getDownloadURL().then((fileURL) {
+      returnURL =  fileURL;
+    });
+    return returnURL;
+  }
+*/
+
+
+
+
+
+
+
+
+
+
 }
