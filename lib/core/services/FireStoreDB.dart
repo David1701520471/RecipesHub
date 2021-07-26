@@ -12,6 +12,8 @@ class FireStoreDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final DocumentReference ref =
       FirebaseFirestore.instance.collection("image").doc();
+  final CollectionReference _recetasInstance =
+      FirebaseFirestore.instance.collection("recetas");
   List<String> urls = [];
 
   Future<bool> createNewUser(UserModel user) async {
@@ -133,5 +135,14 @@ class FireStoreDB {
           .update({'imagenes': urls});
     });
     return returnURL;
+  }
+
+  Future<List<QueryDocumentSnapshot>> getRecetas() async {
+    var value = await _recetasInstance.get();
+    if (value != null) {
+      return value.docs;
+    } else {
+      throw Exception("No se encontro la colleción");
+    }
   }
 }
