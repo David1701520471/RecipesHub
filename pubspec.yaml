@@ -35,10 +35,12 @@ dependencies:
   firebase_core: "0.5.3"
   firebase_auth: "^0.18.4"
   cloud_firestore: "^0.14.4"
+  firebase_storage: ^4.0.1
   #images
   image_picker: ^0.6.7+22
   image_cropper: ^1.4.0
-  firebase_storage: ^4.0.1
+  carousel_slider: ^4.0.0
+  
 
 dev_dependencies:
   lints: ^1.0.1
@@ -55,6 +57,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

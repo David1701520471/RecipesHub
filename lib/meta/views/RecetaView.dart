@@ -7,6 +7,7 @@ import 'package:recipes_hub/meta/widgets/FormularioReceta/CardsDeListado.dart';
 import 'package:recipes_hub/meta/widgets/FormularioReceta/ImagenesCard.dart';
 import 'package:recipes_hub/meta/widgets/FormularioReceta/ListarDificultad.dart';
 import 'package:recipes_hub/meta/widgets/FormularioReceta/ListarNumeros.dart';
+import 'package:recipes_hub/meta/widgets/NavigationDrawer.dart';
 
 class RecetaView extends GetWidget<RecetaController> {
   @override
@@ -14,6 +15,7 @@ class RecetaView extends GetWidget<RecetaController> {
     return GetBuilder<RecetaController>(
       init: RecetaController(),
       builder: (_) => Scaffold(
+        drawer: NavigationDrawer(),
         appBar: AppBar(
           title: Text(
             "Formulario de receta ",
@@ -156,7 +158,6 @@ class RecetaView extends GetWidget<RecetaController> {
                         return Text("Seleccione una imagen desde galeria");
                       } else {
                         return listarImagenes(_);
-
                       }
                     }),
                   ],
@@ -178,7 +179,7 @@ class RecetaView extends GetWidget<RecetaController> {
                       _.formResult.dificultad = _.dificultad;
                       _.formResult.imagenes = _.selectedImageListFile;
 
-                       _.validarFormulario();
+                      _.validarFormulario();
                     })
               ],
             ),
@@ -220,12 +221,13 @@ Widget listarCategorias(RecetaController controller) {
         return CheckBoxList(controller, index);
       });
 }
+
 Widget listarImagenes(RecetaController controller) {
   return GridView.builder(
       itemCount: controller.selectedImageList.length,
       shrinkWrap: true,
       physics: ScrollPhysics(),
       gridDelegate:
-      SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       itemBuilder: (_, index) => ImagenesCard(controller, index));
 }
