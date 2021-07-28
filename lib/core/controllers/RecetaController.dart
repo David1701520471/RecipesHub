@@ -117,7 +117,6 @@ class RecetaController extends GetxController {
         confirmTextColor: Colors.white,
         onCancel: () => Get.back(),
         onConfirm: () {
-          //TODO: enviar el formResult a la base de datos
          FireStoreDB().agregarReceta(formRes, uid);
           print("ya prro");
           Get.back();

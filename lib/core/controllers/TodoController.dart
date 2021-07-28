@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:recipes_hub/core/controllers/AuthController.dart';
-import 'package:recipes_hub/core/controllers/bindings/AuthBinding.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 import 'package:recipes_hub/core/services/FireStoreDB.dart';
 
