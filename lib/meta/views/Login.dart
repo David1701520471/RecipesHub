@@ -5,8 +5,6 @@ import 'package:recipes_hub/core/controllers/AuthController.dart';
 
 
 class Login extends GetWidget<AuthController> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +29,14 @@ class Login extends GetWidget<AuthController> {
                   children: <Widget>[
                     TextFormField(
                       decoration: InputDecoration(hintText: "Email"),
-                      controller: emailController,
+                      controller: _.emailController,
                     ),
                     SizedBox(
                       height: 40,
                     ),
                     TextFormField(
                       decoration: InputDecoration(hintText: "Password"),
-                      controller: passwordController,
+                      controller: _.passwordController,
                       obscureText: true,
                     ),
                     SizedBox(
@@ -47,8 +45,7 @@ class Login extends GetWidget<AuthController> {
                     ElevatedButton(
                       child: Text("Log In"),
                       onPressed: () {
-                        _.login(
-                            emailController.text, passwordController.text);
+                        _.login();
                       },
                     ),
                   ],
