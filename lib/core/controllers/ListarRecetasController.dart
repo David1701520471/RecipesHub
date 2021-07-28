@@ -1,12 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:recipes_hub/core/controllers/AuthController.dart';
+import 'package:recipes_hub/core/controllers/ComentariosController.dart';
 import 'package:recipes_hub/core/services/FireStoreDB.dart';
+import 'package:recipes_hub/meta/views/ComentariosView.dart';
 import 'package:recipes_hub/models/Receta/RecetaListadoModel.dart';
 
 class ListarRecetasController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> _loading = ValueNotifier(false);
+  String userName;
 
   List<RecetaListadoModel> _recipeList;
   String _comentario;
@@ -19,6 +23,7 @@ class ListarRecetasController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    userName = Get.find<AuthController>().user.email;
     _recipeList = [];
     _comentario = null;
     getRecetas();
@@ -33,7 +38,7 @@ class ListarRecetasController extends GetxController {
     this.calificacion = value;
   }
 
-  setComentario(String comentario) {
+  void setComentario(String comentario) {
     this._comentario = comentario;
   }
 
@@ -57,15 +62,15 @@ class ListarRecetasController extends GetxController {
     if (imagene.isEmpty) {
       return Image.asset(
         'assets/images/rescipesHub.png',
-        height: 100,
-        width: MediaQuery.of(context).size.width * .4,
+        height: 120,
+        width: MediaQuery.of(context).size.width * .45,
         fit: BoxFit.fill,
       );
     } else {
       return Image.network(
         imagene,
-        height: 100,
-        width: MediaQuery.of(context).size.width * .4,
+        height: 120,
+        width: MediaQuery.of(context).size.width * .45,
         fit: BoxFit.cover,
       );
     }
@@ -93,8 +98,8 @@ class ListarRecetasController extends GetxController {
     }
   }
 
-///Metodo que crea el listado de imagenes obtenidas de la base de datos 
-///usado en los detalles de las recetas
+  ///Metodo que crea el listado de imagenes obtenidas de la base de datos
+  ///usado en los detalles de las recetas
   List<Widget> crearSlider(List<String> imagenes, BuildContext context) {
     List<Widget> imageSliders = [];
     for (String imagen in imagenes) {
@@ -137,17 +142,23 @@ class ListarRecetasController extends GetxController {
 
   /// Metodo para validar que el comentario contenga caracteres/informacion
   /// @Comentario comentario que el usuario desea enviar
-  void validarComentario(String comentario) {
+  void validarComentario(String recetaId) {
     if (comentario == null) {
       Get.snackbar("Se requiere por lo menos un caracter", "",
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Color.fromARGB(250, 200, 72, 45),
           colorText: Colors.white);
     } else {
-      //TODO:
-      //Enviar en comentario a db crear vista de comentarios
-      //formKey.currentState.reset();
-      //Get.to(() => CommentsView());
+      FireStoreDB().enviarComentario(userName, recetaId, comentario);
+      formKey.currentState.reset();
+      verComentarios(recetaId);
     }
+  }
+
+  ///metodo que envia a la vista de comentarios de una receta
+  ///@recetaId la identificacion de la receta a la que se le quieren ver los comentarios
+  void verComentarios(String recetaId) {
+    Get.lazyPut(() => ComentariosController(recetaId));
+    Get.to(() => ComentariosView());
   }
 }

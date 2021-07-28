@@ -145,14 +145,11 @@ class RecetaView extends GetWidget<RecetaController> {
                           size: 40,
                         ),
                         onPressed: () {
-                          //TODO: Obtener imagenes desde galeria del celular
                           _.getImage(ImageSource.gallery);
                         },
                         label: Text("Seleccionar foto"),
                       ),
                     ),
-                    //TODO: listar imagenes seleccionadas
-
                     Obx(() {
                       if (_.selectedImageList.isEmpty) {
                         return Text("Seleccione una imagen desde galeria");
