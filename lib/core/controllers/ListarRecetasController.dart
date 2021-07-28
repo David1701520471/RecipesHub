@@ -9,8 +9,9 @@ import 'package:recipes_hub/models/Receta/RecetaListadoModel.dart';
 
 class ListarRecetasController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  ValueNotifier<bool> _loading = ValueNotifier(false);
+  final ValueNotifier<bool> _loading = ValueNotifier(false);
   String userName;
+  int _calificacion = null.obs();
 
   List<RecetaListadoModel> _recipeList;
   String _comentario;
@@ -18,7 +19,8 @@ class ListarRecetasController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
   List<RecetaListadoModel> get recipeList => _recipeList;
   String get comentario => _comentario;
-  int calificacion = null.obs();
+  int get calificacion => _calificacion;
+
 
   @override
   void onInit() {
@@ -29,17 +31,13 @@ class ListarRecetasController extends GetxController {
     getRecetas();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
-  void setCalificacion(int value) {
-    this.calificacion = value;
+  void setCalificacion(int calificacion) {
+    _calificacion = calificacion;
   }
 
   void setComentario(String comentario) {
-    this._comentario = comentario;
+    _comentario = comentario;
   }
 
   ///Metodo para obtener las recetas almacenadas en la base de datos
@@ -134,7 +132,7 @@ class ListarRecetasController extends GetxController {
         //TODO: enviar calificacion a la base de datos
         //FireStoreDB().addCalifiacion(calificacion,recipeId,uid);
         print("envia califiacion");
-        calificacion = null;
+        _calificacion = null;
         Get.back();
       },
     );
