@@ -7,7 +7,10 @@ import 'package:recipes_hub/models/Receta/RecetaListadoModel.dart';
 class DetallesRecetaView extends StatelessWidget {
   RecetaListadoModel recipe;
   ListarRecetasController controller;
-  DetallesRecetaView(this.recipe, this.controller);
+  DetallesRecetaView(
+    this.recipe,
+    this.controller,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class DetallesRecetaView extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: TextButton(
                             onPressed: () {
-                              //Get.to(() => CommentsView());
+                              controller.verComentarios(recipe.id);
                             },
                             child: Row(
                               children: [
@@ -183,7 +186,7 @@ class DetallesRecetaView extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       print(controller.comentario);
-                      controller.validarComentario(controller.comentario);
+                      controller.validarComentario(recipe.id);
                       controller.setComentario(null);
                     },
                     child: Icon(Icons.send),

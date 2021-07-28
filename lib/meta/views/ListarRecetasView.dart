@@ -68,10 +68,11 @@ Widget _listViewRecipes() {
                         Column(children: [
                           Container(
                             alignment: Alignment.topLeft,
-                            height: 20,
+                            height: 50,
                             width: MediaQuery.of(context).size.width * .3,
                             child: Text(
                               'Receta: ${controller.recipeList[index].nombre}',
+                              maxLines: null,
                             ),
                           ),
                           SizedBox(

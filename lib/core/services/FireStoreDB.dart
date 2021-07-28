@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:recipes_hub/models/Receta/RecetaModel.dart';
 import 'package:recipes_hub/models/TodoModel.dart';
 import 'package:recipes_hub/models/UserModel.dart';
@@ -14,6 +12,8 @@ class FireStoreDB {
       FirebaseFirestore.instance.collection("image").doc();
   final CollectionReference _recetasInstance =
       FirebaseFirestore.instance.collection("recetas");
+  final CollectionReference _comentariosInstance =
+      FirebaseFirestore.instance.collection("comentarios");
   List<String> urls = [];
 
   Future<bool> createNewUser(UserModel user) async {
@@ -142,6 +142,31 @@ class FireStoreDB {
       return value.docs;
     } else {
       throw Exception("No se encontro la colleción");
+    }
+  }
+
+  Future<List<QueryDocumentSnapshot>> getComentarios(String recetaId) async {
+    var value =
+        await _comentariosInstance.where("recetaId", isEqualTo: recetaId).get();
+    if (value != null) {
+      return value.docs;
+    } else {
+      throw Exception("No se encontro la colleción");
+    }
+  }
+
+  Future<void> enviarComentario(
+      String userName, String recetaId, String comentario) async {
+    try {
+      _firestore.collection("comentarios").doc().set({
+        "recetaId": recetaId,
+        "comentario": comentario,
+        "userName": userName,
+        "fechaDeCreacion": Timestamp.now(),
+      });
+    } catch (e) {
+      print(e);
+      rethrow;
     }
   }
 }

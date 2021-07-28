@@ -6,8 +6,16 @@ class HomeController extends GetxController{
 
   int get num=>_num;
 
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
+  @override
+  void onReady() {
+    super.onReady();
 
+  }
 
   void increment(){
     _num++;
