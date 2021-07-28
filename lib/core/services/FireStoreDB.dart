@@ -63,9 +63,9 @@ class FireStoreDB {
         .snapshots()
         .map((QuerySnapshot query) {
       List<TodoModel> retVal = [];
-      query.docs.forEach((element) {
+      for ( var element in query.docs) {
         retVal.add(TodoModel.fromDocument(element));
-      });
+      }
       return retVal;
     });
   }
