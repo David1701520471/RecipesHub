@@ -4,8 +4,9 @@ import 'package:recipes_hub/core/controllers/ListarRecetasController.dart';
 class ListarCalificacion extends StatelessWidget {
   final ListarRecetasController controller;
   final List<int> listaNumeros = [1, 2, 3, 4, 5];
+  String recetaId;
 
-  ListarCalificacion(this.controller);
+  ListarCalificacion(this.controller, this.recetaId);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class ListarCalificacion extends StatelessWidget {
         onChanged: (value) {
           controller.setCalificacion(value);
           controller.update();
-          controller.enviarCalificacion();
+          controller.enviarCalificacion(recetaId);
         },
         underline: Container(
           color: Colors.transparent,
