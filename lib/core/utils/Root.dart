@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/core/controllers/AuthController.dart';
+import 'package:recipes_hub/core/controllers/ListarRecetasController.dart';
 import 'package:recipes_hub/core/controllers/UserController.dart';
 import 'package:recipes_hub/meta/views/ListarRecetasView.dart';
 import 'package:recipes_hub/meta/views/Login.dart';
@@ -14,8 +15,8 @@ class Root extends GetWidget<AuthController> {
       },
       builder: (_) {
         if (Get.find<AuthController>().user?.uid != null) {
-          //return HomePage();
-          //propositos de pruebas
+            Get.put<ListarRecetasController>(ListarRecetasController(),
+              permanent: true);
           return ListarRecetasView();
         } else {
           return Login();

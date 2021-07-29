@@ -1,22 +1,36 @@
 
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:recipes_hub/core/controllers/UserController.dart';
 import 'package:recipes_hub/models/UserModel.dart';
 import 'package:recipes_hub/core/services/FireStoreDB.dart';
 
+
   class AuthController extends GetxController {
    final FirebaseAuth _auth = FirebaseAuth.instance;
    final  Rx<User> _firebaseUser = Rx<User>();
+
+      TextEditingController emailController;
+      TextEditingController passwordController;
 
     User get user => _firebaseUser.value;
 
     @override
     onInit() {
       super.onInit();
+      emailController = TextEditingController();
+      passwordController = TextEditingController();
       _firebaseUser.bindStream(_auth.authStateChanges());
     }
+
+    @override
+    void onClose() {
+      emailController.dispose();
+      passwordController.dispose();
+    super.onClose();
+  }
 
     void createUser(String name, String email, String password) async {
       try {
@@ -41,16 +55,16 @@ import 'package:recipes_hub/core/services/FireStoreDB.dart';
       }
     }
 
-    void login(String email, String password) async {
+    void login() async {
       try {
         UserCredential _authResult = await _auth.signInWithEmailAndPassword(
-            email: email.trim(), password: password);
+            email: emailController.text.trim(), password: passwordController.text);
         Get.find<UserController>().user =
         await FireStoreDB().getUser(_authResult.user.uid);
       } catch (e) {
         Get.snackbar(
           "Error signing in",
-          e.message,
+           e.message,
           snackPosition: SnackPosition.BOTTOM,
         );
       }
