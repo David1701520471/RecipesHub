@@ -11,6 +11,7 @@ class ListarRecetasController extends GetxController {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   String userName;
+  String uid;
   int _calificacion = null.obs();
 
   List<RecetaListadoModel> _recipeList;
@@ -26,6 +27,7 @@ class ListarRecetasController extends GetxController {
   void onInit() {
     super.onInit();
     userName = Get.find<AuthController>().user.email;
+    uid = Get.find<AuthController>().user.uid;
     _recipeList = [];
     _comentario = null;
     getRecetas();
@@ -118,7 +120,7 @@ class ListarRecetasController extends GetxController {
   }
 
   ///Metodo usado para enviar la calificacion seleccionada por el usuario
-  void enviarCalificacion() {
+  void enviarCalificacion(String recetaId) {
     Get.defaultDialog(
       title: "¿ Desea enviar su calificacion ?",
       titleStyle: TextStyle(fontSize: 17),
@@ -129,9 +131,7 @@ class ListarRecetasController extends GetxController {
       confirmTextColor: Colors.white,
       onCancel: () => null,
       onConfirm: () {
-        //TODO: enviar calificacion a la base de datos
-        //FireStoreDB().addCalifiacion(calificacion,recipeId,uid);
-        print("envia califiacion");
+        FireStoreDB().PuntuarReceta(uid, recetaId, _calificacion);
         _calificacion = null;
         Get.back();
       },

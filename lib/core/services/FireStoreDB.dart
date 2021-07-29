@@ -169,4 +169,18 @@ class FireStoreDB {
       rethrow;
     }
   }
+  Future<void> PuntuarReceta(
+      String userId, String recetaId, int puntuacion) async {
+    try {
+      _firestore.collection("puntuaciones").doc().set({
+        "recetaId": recetaId,
+        "userId": userId,
+        "puntuacion":puntuacion
+      });
+    } catch (e) {
+      print(e);
+      rethrow;
+    }
+  }
+
 }

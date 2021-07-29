@@ -96,7 +96,7 @@ class DetallesRecetaView extends StatelessWidget {
                                   )),
                               child: Column(
                                 children: [
-                                  scoreList(),
+                                  scoreList(recipe.id),
                                 ],
                               )),
                         ],
@@ -214,8 +214,8 @@ Widget listarItems(List<String> items) {
       });
 }
 
-Widget scoreList() {
+Widget scoreList(String recetaId) {
   return GetBuilder<ListarRecetasController>(
-    builder: (controller) => ListarCalificacion(controller),
+    builder: (controller) => ListarCalificacion(controller, recetaId),
   );
 }
